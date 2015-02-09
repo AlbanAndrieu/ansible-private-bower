@@ -1,0 +1,16 @@
+---
+# This playbook contains common plays that will be run on all nodes.
+
+- name: private-bower | Packages
+  npm: >
+    name={{ item }}
+    state=present
+    global=yes
+    version={{ private_bower_version }}
+  with_items:
+    - bower
+  sudo: yes
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')  
+  tags: private_bower_setup
+  
+- debug: msg=" jdiskreport | Avaialable at http://localhost:5678/"
