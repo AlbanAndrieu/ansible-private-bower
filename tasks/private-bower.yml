@@ -8,9 +8,10 @@
     global=yes
     version={{ private_bower_version }}
   with_items:
-    - bower
+    - private-bower
   sudo: yes
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')  
   tags: private_bower_setup
   
-- debug: msg=" jdiskreport | Avaialable at http://localhost:5678/"
+- debug: msg=" private-bower | Run private-bower"
+- debug: msg=" private-bower | Avaialable at http://localhost:5678/"
