@@ -12,6 +12,20 @@
   sudo: yes
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')  
   tags: private_bower_setup
+
+- name: private-bower | Copy the private-bower init script
+  copy: src=private-bower-{{ ansible_distribution }}.sh dest=/etc/init.d/private-bower mode=0755
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  tags: configure
   
-- debug: msg=" private-bower | Run private-bower"
+- name: private-bower | Copy the private-bower backup script
+  copy: src=private-bower-backup-{{ ansible_distribution }}.sh dest={{ private_bower_base_dir }}/bin/backup.sh mode=0755
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and private_bower_backup_enabled
+  tags: configure  
+  
+- name: private-bower | Start the private-bower service
+  service: name=private-bower state=started enabled=true
+  tags: service  
+        
+#- debug: msg=" private-bower | Run private-bower"
 - debug: msg=" private-bower | Avaialable at http://localhost:5678/"

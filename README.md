@@ -1,8 +1,8 @@
 ## alban.andrieu.private-bower
 
-[![Travis CI](http://img.shields.io/travis/AlbanAndrieu/ansible-private-bower.svg?style=flat)](http://travis-ci.org/AlbanAndrieu/ansible-private-bower) [![Branch](http://img.shields.io/github/tag/AlbanAndrieu/ansible-private-bower.svg?style=flat-square)](https://github.com/AlbanAndrieu/ansible-private-bower/tree/master) [![Donate](https://img.shields.io/gratipay/AlbanAndrieu.svg?style=flat)](https://www.gratipay.com/AlbanAndrieu)  [![Ansible Galaxy](http://img.shields.io/badge/galaxy-alban.andrieu.private-bower-blue.svg?style=flat)](https://galaxy.ansible.com/list#/roles/1997) [![Platforms](http://img.shields.io/badge/platforms-ubuntu-lightgrey.svg?style=flat)](#)
+[![Travis CI](http://img.shields.io/travis/AlbanAndrieu/ansible-private-bower.svg?style=flat)](http://travis-ci.org/AlbanAndrieu/ansible-private-bower) [![Branch](http://img.shields.io/github/tag/AlbanAndrieu/ansible-private-bower.svg?style=flat-square)](https://github.com/AlbanAndrieu/ansible-private-bower/tree/master) [![Donate](https://img.shields.io/gratipay/AlbanAndrieu.svg?style=flat)](https://www.gratipay.com/AlbanAndrieu)  [![Ansible Galaxy](http://img.shields.io/badge/galaxy-alban.andrieu.privatebower-blue.svg?style=flat)](https://galaxy.ansible.com/list#/roles/2852) [![Platforms](http://img.shields.io/badge/platforms-ubuntu-lightgrey.svg?style=flat)](#)
 
-Ensures that private-bower is properly installed (using `apt`) and configured
+Ensures that [private-bower](https://www.npmjs.com/package/private-bower) is properly installed and configured.
 
 ### Installation
 
@@ -12,47 +12,18 @@ To install it, run:
 
     ansible-galaxy install alban.andrieu.private-bower
 
+### Role dependencies
 
+- `nodejs`
 
 ### Role variables
 
 List of default variables available in the inventory:
 
 ```yaml
-        private-bower_enabled: yes                       # Enable module
+        private_bower_enabled: yes                       # Enable module
     
-    private-bower_home_dir: "/usr/share/private-bower"
-    private-bower_configuration: "{{ private-bower_home_dir }}/bin/private-bower.properties"
-    
-    private-bower_dir_tmp: "/tmp" # or override with "{{ tempdir.stdout }} in order to have be sure to download the file"
-    
-    private-bower_plugins_version: "1.2.0"
-    
-    private-bower_plugins_standard_enabled: yes
-    private-bower_plugins_standard_archive: "private-bowerPlugins-Standard-{{ private-bower_plugins_version }}.zip"
-    private-bower_plugins_standard_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_plugins_standard_archive }}"
-    
-    private-bower_plugins_extras_enabled: yes
-    private-bower_plugins_extras_archive: "private-bowerPlugins-Extras-{{ private-bower_plugins_version }}.zip"
-    private-bower_plugins_extras_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_plugins_extras_archive }}"
-    
-    private-bower_plugins_extraslibs_enabled: yes
-    private-bower_plugins_extraslibs_archive: "private-bowerPlugins-ExtrasLibs-{{ private-bower_plugins_version }}.zip"
-    private-bower_plugins_extraslibs_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_plugins_extraslibs_archive }}"
-    
-    private-bower_plugins_webdriver_enabled: no
-    private-bower_plugins_webdriver_archive: "private-bowerPlugins-WebDriver-{{ private-bower_plugins_version }}.zip"
-    private-bower_plugins_webdriver_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_plugins_webdriver_archive }}"
-    
-    private-bower_plugins_hadoop_enabled: no
-    private-bower_plugins_hadoop_archive: "private-bowerPlugins-Hadoop-{{ private-bower_plugins_version }}.zip"
-    private-bower_plugins_hadoop_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_plugins_hadoop_archive }}"
-    
-    private-bower_serveragent_version: "2.2.1"
-    
-    private-bower_serveragent_enabled: no
-    private-bower_serveragent_archive: "ServerAgent-{{ private-bower_serveragent_version }}.zip"
-    private-bower_serveragent_url: "http://private-bower-plugins.org/downloads/file/{{ private-bower_serveragent_archive }}"
+    private_bower_version: "0.6.5"
 ```
 
 
