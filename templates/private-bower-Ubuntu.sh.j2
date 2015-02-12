@@ -10,7 +10,7 @@ cd {{ private_bower_base_dir }}
 
 case "$1" in
 start)
-  screen -d -m private-bower --config private-bower.json &
+  screen -d -m private-bower --config bower.conf.json
 ;;
 stop)
   pkill -f private-bower

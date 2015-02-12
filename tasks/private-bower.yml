@@ -1,6 +1,13 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
+- name: private-bower | Install screen
+  apt:
+    pkg=screen
+    state="present"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  tags: private_bower_setup
+
 - name: private-bower | Packages
   npm: >
     name={{ item }}
