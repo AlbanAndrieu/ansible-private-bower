@@ -1,0 +1,18 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+if [ -z "$1" ]; then
+  echo "`basename $0` {start|stop}"
+  exit
+fi
+
+cd {{ private_bower_base_dir }}
+
+case "$1" in
+start)
+  screen -d -m private-bower --config private-bower.json &
+;;
+stop)
+  pkill -f private-bower
+;;
+esac

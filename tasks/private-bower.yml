@@ -14,12 +14,23 @@
   tags: private_bower_setup
 
 - name: private-bower | Copy the private-bower init script
-  copy: src=private-bower-{{ ansible_distribution }}.sh dest=/etc/init.d/private-bower mode=0755
+  template:
+    src: "private-bower-{{ ansible_distribution }}.sh.j2"
+    dest: "/etc/init.d/private-bower"
+    owner: root
+    group: root
+    mode: 0755
+  sudo: yes  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: configure
   
 - name: private-bower | Copy the private-bower backup script
-  copy: src=private-bower-backup-{{ ansible_distribution }}.sh dest={{ private_bower_base_dir }}/bin/backup.sh mode=0755
+  template:
+    src: "rivate-bower-backup-{{ ansible_distribution }}.sh.j2"
+    dest: "{{ private_bower_base_dir }}/bin/backup.sh"
+    owner: root
+    group: root
+    mode: 0755  
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and private_bower_backup_enabled
   tags: configure  
   

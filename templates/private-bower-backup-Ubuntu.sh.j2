@@ -1,0 +1,5 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+cd {{ private_bower_base_dir }}
+rdiff-backup ./ {{ private_bower_backup }}
