@@ -24,6 +24,13 @@ List of default variables available in the inventory:
         private_bower_enabled: yes                       # Enable module
     
     private_bower_version: "0.6.5"
+    private_bower_base_dir: "/usr/local/lib/node_modules/private-bower"
+    
+    private_bower_backup_enabled: false                       # Enable backup
+    private_bower_backup_host: "backup-server"
+    private_bower_backup_user: "bower"
+    private_bower_backup_dir: "backup"
+    private_bower_backup: "{{ private_bower_backup_user }}@{{ private_bower_backup_host }}::{{ private_bower_backup_dir }}"
 ```
 
 
