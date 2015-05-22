@@ -1,7 +1,13 @@
 private_bower_enabled: yes                       # Enable module
 
-private_bower_version: "0.6.5"
+private_bower_version: "1.0.7"
 private_bower_base_dir: "/usr/local/lib/node_modules/private-bower"
+private_bower_conf: "bower.conf.json"
+
+private_bower_repository_cache_cache_private: "false"
+private_bower_repository_cache_git_enabled: "true"
+private_bower_authentication_enabled: "false"
+private_bower_authentication_key: "password"
 
 private_bower_backup_enabled: false                       # Enable backup
 private_bower_backup_host: "backup-server"
