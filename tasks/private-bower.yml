@@ -51,6 +51,10 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and private_bower_backup_enabled
   tags: configure
 
+- name: private-bower | Update git configuration (http.sslVerify)
+  action: command git config --global http.sslVerify {{ shell_git_ssl }}
+  sudo: yes
+
 - name: private-bower | Start the private-bower service
   service: name=private-bower state=started enabled=true
   tags: service

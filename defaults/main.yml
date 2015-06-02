@@ -14,3 +14,5 @@ private_bower_backup_host: "backup-server"
 private_bower_backup_user: "bower"
 private_bower_backup_dir: "backup"
 private_bower_backup: "{{ private_bower_backup_user }}@{{ private_bower_backup_host }}::{{ private_bower_backup_dir }}"
+
+shell_git_ssl: "false"
