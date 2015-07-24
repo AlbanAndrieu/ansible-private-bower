@@ -51,6 +51,10 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and private_bower_backup_enabled
   tags: configure
 
+#TODO add to user
+#export GIT_SSL_NO_VERIFY=true
+#export GIT_CURL_VERBOSE=1
+
 - name: private-bower | Update git configuration (http.sslVerify)
   action: command git config --global http.sslVerify {{ shell_git_ssl }}
   sudo: yes
