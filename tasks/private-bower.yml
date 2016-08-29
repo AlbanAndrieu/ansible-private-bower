@@ -34,7 +34,7 @@
 
 - name: private-bower | Copy the private-bower init script
   template:
-    src: "private-bower-{{ ansible_distribution }}.sh.j2"
+    src: "private-bower.sh.j2"
     dest: "/etc/init.d/private-bower"
     owner: root
     group: root
@@ -44,7 +44,7 @@
 
 - name: private-bower | Copy the private-bower backup script
   template:
-    src: "rivate-bower-backup-{{ ansible_distribution }}.sh.j2"
+    src: "rivate-bower-backup.sh.j2"
     dest: "{{ private_bower_base_dir }}/bin/backup.sh"
     owner: root
     group: root
