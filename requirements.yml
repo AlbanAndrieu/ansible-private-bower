@@ -1,0 +1,4 @@
+- src: https://github.com/AlbanAndrieu/ansible-nodejs.git
+  name: nodejs
+  #path: roles
+  scm: git
