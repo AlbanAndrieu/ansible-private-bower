@@ -15,4 +15,7 @@ private_bower_backup_user: "bower"
 private_bower_backup_dir: "backup"
 private_bower_backup: "{{ private_bower_backup_user }}@{{ private_bower_backup_host }}::{{ private_bower_backup_dir }}"
 
+# Package states: present or installed or latest
+private_bower_pkg_state: present
+
 shell_git_ssl: "false"
