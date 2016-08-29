@@ -39,6 +39,7 @@
     owner: root
     group: root
     mode: 0755
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: yes
   tags: configure
 
@@ -72,6 +73,7 @@
 
 - name: private-bower | Start the private-bower service
   service: name=private-bower state=started enabled=true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
 
 #- debug: msg=" private-bower | Run private-bower"
