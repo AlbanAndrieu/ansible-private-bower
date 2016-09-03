@@ -70,6 +70,7 @@
 - name: private-bower | Update git configuration (http.sslVerify)
   action: command git config --global http.sslVerify {{ shell_git_ssl }}
   become: yes
+  changed_when: false
 
 - name: private-bower | Start the private-bower service
   service: name=private-bower state=started enabled=true
