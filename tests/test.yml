@@ -1,23 +1,29 @@
 ---
 - hosts: all
 
-#  pre_tasks:
-#    - name: Ensure build dependencies are installed (RedHat).
-#      yum: 'name="{{ item }}" state=present'
-#      with_items:
-#        - openssh-server
-#        - openssh-clients
-#      when: ansible_os_family == 'RedHat'
-#
-#    - name: Ensure build dependencies are installed (Debian).
-#      apt: 'name="{{ item }}" state=installed'
-#      with_items:
-#        - openssh-server
-#        - openssh-client
-#      when: ansible_os_family == 'Debian'
+  vars:
+    private_bower_version: 1.0.7
+
+  pre_tasks:
+    - name: Ensure build dependencies are installed (RedHat).
+      yum: name=which state=present
+      when: ansible_os_family == 'RedHat'
 
   roles:
     - role_under_test
 
 #  vars:
 #      todo_enabled: no
+
+  tasks:
+    - name: Check private-bower
+      command: which private-bower
+      changed_when: false
+      register: private_bower_path
+
+    - debug:
+        msg: "Private-bower was installed in {{private_bower_path.stdout}}"
+
+    - fail:
+        msg: "Private-bower Not Found, tests failed."
+      when: private_bower_path.stdout != "/usr/local/bin/private-bower"

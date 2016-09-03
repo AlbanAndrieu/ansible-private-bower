@@ -2,59 +2,76 @@
 sudo: required
 
 env:
-#  - distribution: centos
-#    version: 6
-#    init: /sbin/init
-#    run_opts: ""
-#  - distribution: centos
-#    version: 7
-#    init: /usr/lib/systemd/systemd
-#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  - distribution: ubuntu # phusion/baseimage
-    version: 14.04
-    init: /sbin/my_init
-    run_opts: ""
-  - distribution: ubuntu
-    version: 12.04
+  - distro: centos7
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+    PRIVATE_BOWER_VERSION: 1.0.7
+  - distro: centos6
     init: /sbin/init
-    run_opts: ""
+    run_opts: "--privileged"
+    playbook: test.yml
+    PRIVATE_BOWER_VERSION: 1.0.7
+#  - distro: ubuntu1604
+#    init: /lib/systemd/systemd
+#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+#    playbook: test.yml
+#    PRIVATE_BOWER_VERSION: 1.0.7
+  - distro: ubuntu1404
+    init: /sbin/init
+    run_opts: "--privileged"
+    playbook: test.yml
+    PRIVATE_BOWER_VERSION: 1.0.7
+#  - distro: ubuntu1204
+#    init: /sbin/init
+#    run_opts: "--privileged"
+#    playbook: test.yml
+#    PRIVATE_BOWER_VERSION: 1.0.7
+  - distro: debian8
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+    PRIVATE_BOWER_VERSION: 1.0.7
 
 services:
   - docker
 
 before_install:
-  # Customize container
-  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
+  # Pull container.
+  - 'sudo docker pull geerlingguy/docker-${distro}-ansible:latest'
 
 script:
   - container_id=$(mktemp)
-  # Run container in detached state
-  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
+  # Run container in detached state.
+  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
   # Ansible version.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version; git --version'
 
   # Ansible galaxy.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/requirements.yml'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy search nabla --version'
+  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy setup --list'
+  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install AlbanAndrieu.java'
+  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm git clone https://github.com/AlbanAndrieu/ansible-java.git /etc/ansible/roles/java'
+  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml'
 
   # Ansible syntax check.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml --syntax-check'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
 
   # Test role.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml'
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} -e "private_bower_version=$PRIVATE_BOWER_VERSION"'
 
   # Test role idempotence.
-  #- >
-  #  sudo docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
-  #  | grep -q 'changed=0.*failed=0'
-  #  && (echo 'Idempotence test: pass' && exit 0)
-  #  || (echo 'Idempotence test: fail' && exit 1)
+  - idempotence=$(mktemp)
+  - sudo docker exec "$(cat ${container_id})" ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
-  # Make sure private-bower process is running.
-  #- >
-  #  sudo docker exec "$(cat ${container_id})" ps -ax | grep -q 'private-bower'
-  #  && (echo 'private-bower is on: pass' && exit 0)
-  #  || (echo 'private-bower is on: fail' && exit 1)
+  # Ensure jmeter is installed and at the right version.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm which /usr/local/bin/private-bower'
 
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'
