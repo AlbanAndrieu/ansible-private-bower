@@ -1,6 +1,6 @@
 private_bower_enabled: yes                       # Enable module
 
-private_bower_version: "1.0.7"
+private_bower_version: "1.1.7"
 private_bower_base_dir: "/usr/local/lib/node_modules/private-bower"
 private_bower_conf: "bower.conf.json"
 

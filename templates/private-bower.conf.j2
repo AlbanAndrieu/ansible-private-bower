@@ -1,0 +1,17 @@
+# {{ ansible_managed }}
+description "private bower"
+
+start on started mountall
+stop on shutdown
+
+respawn
+respawn limit 99 5
+
+kill timeout 20
+
+limit nofile 32768 32768
+
+script
+        chdir {{ private_bower_base_dir }}
+        exec sudo -u www-data private-bower --config  myBowerConfig.json >> /var/log/private-bower.log 2>&1
+end script

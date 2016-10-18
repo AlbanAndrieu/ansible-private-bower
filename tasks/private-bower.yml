@@ -43,6 +43,28 @@
   become: yes
   tags: configure
 
+- name: private-bower | Copy the private-bower init conf script
+  template:
+    src: "private-bower.conf.j2"
+    dest: "/etc/init/private-bower.conf"
+    owner: root
+    group: root
+    mode: 0755
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: yes
+  tags: configure
+
+- name: private-bower | Copy the private-bower init service script
+  template:
+    src: "private-bower.service.j2"
+    dest: "/lib/systemd/system/private-bower.service"
+    owner: root
+    group: root
+    mode: 0644
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  become: yes
+  tags: configure
+
 - name: private-bower | Copy the private-bower backup script
   template:
     src: "rivate-bower-backup.sh.j2"
@@ -76,6 +98,8 @@
   service: name=private-bower state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
+#Ignore below because of issue with systemd such as https://github.com/ansible/ansible-modules-core/issues/4805
+#  ignore_errors: true
+  become: yes
 
-#- debug: msg=" private-bower | Run private-bower"
 - debug: msg=" private-bower | Avaialable at http://localhost:5678/"

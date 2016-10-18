@@ -1,0 +1,14 @@
+[Unit]
+Description=Private Bower
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/default/private-bower
+PIDFile={{ private_bower_base_dir }}/bin/private-bower.pid
+ExecStart=/etc/init.d/private-bower start
+ExecReload=/etc/init.d/private-bower restart
+ExecStop=/etc/init.d/private-bower stop
+
+[Install]
+Alias=private-bower
+WantedBy=default.target
