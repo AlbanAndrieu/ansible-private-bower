@@ -1,21 +1,10 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-- name: private-bower | Install screen (Debian based)
-  apt:
-    name={{ item }}
-    state={{ private_bower_pkg_state }}
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  with_items:
-   - screen
-  tags: private_bower_setup
-  become: yes
 
-- name: private-bower | Install screen (RedHat based)
-  yum:
-   name={{ item }}
-   state={{ private_bower_pkg_state }} update_cache=yes
-  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+- name: private-bower | Install screen
+  action: "{{ ansible_pkg_mgr}} name={{ item }} update_cache=yes state={{ private_bower_pkg_state|default('present') }}"
+  tags: cmake
   with_items:
    - screen
   tags: private_bower_setup
@@ -43,16 +32,16 @@
   become: yes
   tags: configure
 
-- name: private-bower | Copy the private-bower init conf script
-  template:
-    src: "private-bower.conf.j2"
-    dest: "/etc/init/private-bower.conf"
-    owner: root
-    group: root
-    mode: 0755
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
-  tags: configure
+#- name: private-bower | Copy the private-bower init conf script
+#  template:
+#    src: "private-bower.conf.j2"
+#    dest: "/etc/init/private-bower.conf"
+#    owner: root
+#    group: root
+#    mode: 0644
+#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#  become: yes
+#  tags: configure
 
 - name: private-bower | Copy the private-bower init service script
   template:
@@ -98,8 +87,6 @@
   service: name=private-bower state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
-#Ignore below because of issue with systemd such as https://github.com/ansible/ansible-modules-core/issues/4805
-#  ignore_errors: true
   become: yes
 
 - debug: msg=" private-bower | Avaialable at http://localhost:5678/"
