@@ -21,11 +21,11 @@ cd {{ private_bower_base_dir }}
 
 case "$1" in
 start)
-  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} >> {{ private_bower_log }} 2>&1
+  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} | tee {{ private_bower_log }}
 ;;
 restart)
   pkill -f private-bower
-  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} >> {{ private_bower_log }} 2>&1
+  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} | tee {{ private_bower_log }}
 ;;
 stop)
   pkill -f private-bower
