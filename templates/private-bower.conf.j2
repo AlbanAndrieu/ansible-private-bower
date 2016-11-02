@@ -13,5 +13,5 @@ limit nofile 32768 32768
 
 script
         chdir {{ private_bower_base_dir }}
-        exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} | tee {{ private_bower_log }}
+        exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
 end script

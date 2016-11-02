@@ -5,7 +5,7 @@ private_bower_base_dir: "/usr/local/lib/node_modules/private-bower"
 private_bower_conf: "bower.conf.json"
 private_bower_user: "www-data"
 private_bower_log: "/var/log/private-bower.log"
-private_bower_startup_opt: "" #use "screen -d -m"
+private_bower_startup_opt: "" #use "screen -dmL"
 
 private_bower_repository_cache_cache_private: "false"
 private_bower_repository_cache_git_enabled: "true"
