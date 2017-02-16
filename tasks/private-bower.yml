@@ -1,10 +1,8 @@
 ---
 # This playbook contains common plays that will be run on all nodes.
 
-
 - name: private-bower | Install screen
   action: "{{ ansible_pkg_mgr}} name={{ item }} update_cache=yes state={{ private_bower_pkg_state|default('present') }}"
-  tags: cmake
   with_items:
    - screen
   tags: private_bower_setup
