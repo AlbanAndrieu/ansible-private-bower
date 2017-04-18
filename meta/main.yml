@@ -1,7 +1,7 @@
 ---
 #dependencies: []
 dependencies:
-  - { role: nodejs, become: true }
+  - { role: JasonGiedymin.nodejs, name: nodejs, become: true }
 
 galaxy_info:
   author: Alban Andrieu
