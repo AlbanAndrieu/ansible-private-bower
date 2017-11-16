@@ -1,4 +1,4 @@
 - src: https://github.com/AlbanAndrieu/ansible-nodejs.git
-  name: nodejs
+  name: geerlingguy.nodejs
   #path: roles
   scm: git
