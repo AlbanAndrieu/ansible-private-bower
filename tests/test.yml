@@ -15,15 +15,15 @@
 #  vars:
 #      todo_enabled: no
 
-  tasks:
-    - name: Check private-bower
-      command: which private-bower
-      changed_when: false
-      register: private_bower_path
-
-    - debug:
-        msg: "Private-bower was installed in {{private_bower_path.stdout}}"
-
-    - fail:
-        msg: "Private-bower Not Found, tests failed."
-      when: private_bower_path.stdout != "/usr/local/bin/private-bower"
+#  tasks:
+#    - name: Check private-bower
+#      command: which private-bower
+#      changed_when: false
+#      register: private_bower_path
+#
+#    - debug:
+#        msg: "Private-bower was installed in {{private_bower_path.stdout}}"
+#
+#    - fail:
+#        msg: "Private-bower Not Found, tests failed."
+#      when: private_bower_path.stdout != "/usr/local/bin/private-bower"

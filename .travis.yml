@@ -84,7 +84,7 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
-  # Ensure jmeter is installed and at the right version.
+  # Ensure private-bower is installed and at the right version.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm which /usr/local/bin/private-bower'
 
   # Clean up
