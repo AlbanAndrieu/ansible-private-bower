@@ -2,13 +2,11 @@
 # This playbook contains common plays that will be run on all nodes.
 
 - name: private-bower | Install screen
-  action: "{{ ansible_pkg_mgr }} name={{ item }} update_cache=yes state={{ private_bower_pkg_state|default('present') }}"
-  with_items:
-   - screen
+  action: "{{ ansible_pkg_mgr }} name=screen update_cache=yes state={{ private_bower_pkg_state|default('present') }}"
   tags: private_bower_setup
-  become: yes
+  become: true
 
-- name: private-bower | Packages
+- name: private-bower | Private-bower packages
   npm: >
     name={{ item }}
     state=present
@@ -16,9 +14,20 @@
     version={{ private_bower_version }}
   with_items:
     - private-bower
-  become: yes
+  become: true
   tags: private_bower_setup
 
+- name: private-bower | Bower packages
+  npm: >
+    name={{ item }}
+    state=present
+    global=yes
+    version={{ private_bower_bower_version }}
+  with_items:
+    - bower
+  become: true  
+  tags: bower_setup
+  
 - name: private-bower | Copy the private-bower init script
   template:
     src: "private-bower.sh.j2"
@@ -27,7 +36,7 @@
     group: root
     mode: 0755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
   tags: configure
 
 #- name: private-bower | Copy the private-bower init conf script
@@ -38,7 +47,7 @@
 #    group: root
 #    mode: 0644
 #  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-#  become: yes
+#  become: true
 #  tags: configure
 
 - name: private-bower | Copy the private-bower init service script
@@ -49,7 +58,7 @@
     group: root
     mode: 0644
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
   tags: configure
 
 - name: private-bower | Copy the private-bower backup script
@@ -78,13 +87,13 @@
 
 - name: private-bower | Update git configuration (http.sslVerify)
   action: command git config --global http.sslVerify {{ shell_git_ssl }}
-  become: yes
+  become: true
   changed_when: false
 
 - name: private-bower | Start the private-bower service
   service: name=private-bower state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
-  become: yes
+  become: true
 
 - debug: msg=" private-bower | Avaialable at http://localhost:5678/"

@@ -25,9 +25,11 @@ start)
 ;;
 restart)
   pkill -f private-bower
+  lsof -i :5678
   exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
 ;;
 stop)
   pkill -f private-bower
+  lsof -i :5678
 ;;
 esac
