@@ -1,7 +1,5 @@
 ---
 #dependencies: []
-dependencies:
-  - { role: JasonGiedymin.nodejs, name: nodejs, become: true }
 
 galaxy_info:
   author: Alban Andrieu
@@ -43,7 +41,16 @@ ansigenome_info:
     Ensures that [private-bower](https://www.npmjs.com/package/private-bower) is properly installed and configured.
 
   usage: |
-    Describe how to use in more detail...
+    Use :
+
+        `
+        - name: Install private-bower
+          hosts: workstation
+
+          roles:
+        #    - geerlingguy.nodejs
+            - alban.andrieu.private-bower
+        `
 
   #custom: |
   #  Any custom output you want after the usage section..
