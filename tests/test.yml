@@ -1,19 +1,17 @@
 ---
 - hosts: all
 
-  vars:
-    private_bower_version: 1.0.7
-
   pre_tasks:
     - name: Ensure build dependencies are installed (RedHat).
       yum: name=which state=present
       when: ansible_os_family == 'RedHat'
 
   roles:
-    - role_under_test
+    - role: geerlingguy.nodejs
+    - role: role_under_test
 
-#  vars:
-#      todo_enabled: no
+  vars:
+       private_bower_version: 1.1.9
 
 #  tasks:
 #    - name: Check private-bower

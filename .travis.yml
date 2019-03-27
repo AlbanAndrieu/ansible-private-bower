@@ -1,6 +1,20 @@
 ---
-sudo: required
+# Copyright Alban Andrieu 2013-2017
+# Distributed under the GPL-3.0
+# (See accompanying file LICENSE.md)
 
+sudo: required
+dist: trusty
+
+node_js:
+# - "iojs"
+  - "8"
+branches:
+  only:
+  - master
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+    
 env:
 #  - distro: centos7
 #    distribution: centos
@@ -44,7 +58,9 @@ env:
 #    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 #    playbook: test.yml
 #    PRIVATE_BOWER_VERSION: 1.0.7
-
+  global:
+    secure: AZtlXwv64rBSAE1L7cNGhGnXZxs+zrBrKqYfs1o0s9n+7bo6XDJtDtPCaNODonoXo9+WY0NpZErFUsx/FvCXhOgkjpMP1OLdi7iX2R7qMntl8YtDOWI8NCYggCIeqRG8EsN9hjL/6IClvkfudyDLV0aKUyWRrVzwciDsLhgStyo=
+    
 services:
   - docker
 
@@ -90,5 +106,3 @@ script:
   # Clean up
   - 'sudo docker stop "$(cat ${container_id})"'
 
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
