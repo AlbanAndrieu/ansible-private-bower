@@ -7,14 +7,20 @@ sudo: required
 dist: trusty
 
 language: node_js
-
 node_js:
 # - "iojs"
   - "8"
   - "11"
-    
-cache: npm
-    
+cache:
+  pip: true
+  npm: true
+  yarn: true
+  directories:
+    - $HOME/.sonar/cache
+    - $HOME/.cache
+    - $HOME/.m2
+    - node_modules
+
 branches:
   only:
   - master
@@ -74,11 +80,10 @@ before_install:
   # Pull container.
   - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
   #- 'sudo docker pull geerlingguy/docker-${distro}-ansible:latest'
-  - npm i -g npm@6.9.0
+  #- npm i -g npm@6.9.0
   
-script:
-  - which npm
-  - npm --version  
+install:
+  - npm --version
   - container_id=$(mktemp)
   # Run container in detached state.
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
@@ -89,10 +94,7 @@ script:
 
   # Ansible galaxy.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy search nabla --version'
-  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy setup --list'
-  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install AlbanAndrieu.java'
-  #- 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm git clone https://github.com/AlbanAndrieu/ansible-java.git /etc/ansible/roles/java'
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml'
+#  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml'
 
   # Ansible syntax check.
   - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'

@@ -7,7 +7,7 @@
       when: ansible_os_family == 'RedHat'
 
   roles:
-    - role: geerlingguy.nodejs
+#    - role: geerlingguy.nodejs
     - role: role_under_test
 
   vars:
