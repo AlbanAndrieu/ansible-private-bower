@@ -23,6 +23,16 @@ node_js:
   - "8"
   - "11"
 
+python:
+#  - 2.7
+#  - 3.3
+#  - 3.4
+#  - 3.5
+  - 3.6
+
+services:
+  - docker
+
 branches:
   only:
   - master
@@ -65,6 +75,9 @@ env:
 #    playbook: test.yml
 #    PRIVATE_BOWER_VERSION: 1.1.9
   global:
+    - JENKINS_HOME: /home/jenkins
+    - JENKINS_UID: 3000
+    - DOCKER_GID: 999
     - ANSIBLE_VERSION=2.8.1
     - secure: dFb9uIYQbUOIQIReGk49jcI1t6dNhyGXWpC6+xWYPSXMBpsE+GEHD4SjhUUfEfmb9oqvldW27D6h+gGqnGFnB6MKC/Ecijj9v2KsEFfDplm62piSh2gSd+02ZSIJQSTb2AsuesG7rIwjgtqtV/gN5+1FuJtQKgqIsW4MiAwNwPg=
 
@@ -102,7 +115,6 @@ install:
 
   - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
 
-
 script:
   # Check ansible version
   - ansible --version
@@ -115,3 +127,8 @@ script:
 
   # First run
   - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
+
+
+  # Ansible syntax check.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
+
