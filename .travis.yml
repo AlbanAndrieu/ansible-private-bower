@@ -108,10 +108,10 @@ script:
   - ansible --version
 
   # Check syntax
-  - ansible-playbook -i ./hosts --syntax-check private-bower.yml -vvvv --connection=local -e "python_versions=[2.7, 3.5]"
+  - ansible-playbook -i ./hosts --syntax-check private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
   # Molecule test
   # - molecule test
 
   # First run
-  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "python_versions=[2.7, 3.5]"
+  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
