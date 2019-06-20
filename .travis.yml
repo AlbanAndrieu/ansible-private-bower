@@ -8,9 +8,16 @@ dist: trusty
 
 language: node_js
 node_js:
-# - "iojs"
   - "8"
   - "11"
+
+branches:
+  only:
+  - master
+
+#notifications:
+#  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+    
 cache:
   pip: true
   npm: true
@@ -21,12 +28,6 @@ cache:
     - $HOME/.m2
     - node_modules
 
-branches:
-  only:
-  - master
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
-    
 env:
 #  - distro: centos7
 #    distribution: centos
@@ -71,19 +72,20 @@ env:
 #    playbook: test.yml
 #    PRIVATE_BOWER_VERSION: 1.0.7
   global:
-    secure: AZtlXwv64rBSAE1L7cNGhGnXZxs+zrBrKqYfs1o0s9n+7bo6XDJtDtPCaNODonoXo9+WY0NpZErFUsx/FvCXhOgkjpMP1OLdi7iX2R7qMntl8YtDOWI8NCYggCIeqRG8EsN9hjL/6IClvkfudyDLV0aKUyWRrVzwciDsLhgStyo=
+    secure: dFb9uIYQbUOIQIReGk49jcI1t6dNhyGXWpC6+xWYPSXMBpsE+GEHD4SjhUUfEfmb9oqvldW27D6h+gGqnGFnB6MKC/Ecijj9v2KsEFfDplm62piSh2gSd+02ZSIJQSTb2AsuesG7rIwjgtqtV/gN5+1FuJtQKgqIsW4MiAwNwPg=
     
 services:
   - docker
 
 before_install:
-  # Pull container.
-  - 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
-  #- 'sudo docker pull geerlingguy/docker-${distro}-ansible:latest'
-  #- npm i -g npm@6.9.0
-  
+# Pull container.
+- 'sudo docker build --rm=true --file=tests/Dockerfile.${distribution}-${version} --tag=${distribution}-${version}:ansible tests'
+#- 'sudo docker pull geerlingguy/docker-${distro}-ansible:latest'
+#- npm i -g npm@6.9.0
+- npm config set spin false
+
 install:
-  - npm --version
+#  - npm --version
   - container_id=$(mktemp)
   # Run container in detached state.
   - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
