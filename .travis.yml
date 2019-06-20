@@ -63,14 +63,15 @@ env:
 #    init: /lib/systemd/systemd
 #    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 #    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.1.9    
+#    PRIVATE_BOWER_VERSION: 1.1.9
   global:
-    secure: dFb9uIYQbUOIQIReGk49jcI1t6dNhyGXWpC6+xWYPSXMBpsE+GEHD4SjhUUfEfmb9oqvldW27D6h+gGqnGFnB6MKC/Ecijj9v2KsEFfDplm62piSh2gSd+02ZSIJQSTb2AsuesG7rIwjgtqtV/gN5+1FuJtQKgqIsW4MiAwNwPg=
+    - ANSIBLE_VERSION: 2.8.1
+    - secure: dFb9uIYQbUOIQIReGk49jcI1t6dNhyGXWpC6+xWYPSXMBpsE+GEHD4SjhUUfEfmb9oqvldW27D6h+gGqnGFnB6MKC/Ecijj9v2KsEFfDplm62piSh2gSd+02ZSIJQSTb2AsuesG7rIwjgtqtV/gN5+1FuJtQKgqIsW4MiAwNwPg=
 
 matrix:
   fast_finish: true
   allow_failures:
-  - env: PRIVATE_BOWER_VERSION=1.0.7
+  - env: PRIVATE_BOWER_VERSION: 1.0.7
 
 before_install:
   - npm config set spin false
