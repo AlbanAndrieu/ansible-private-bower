@@ -4,7 +4,7 @@
 # (See accompanying file LICENSE.md)
 
 sudo: required
-dist: trusty
+dist: travis_lts
 
 script:
 - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
@@ -48,34 +48,8 @@ cache:
 
 env:
   matrix:
-#  - distro: centos7
-#    distribution: centos
-#    version: 7
-#    init: /usr/lib/systemd/systemd
-#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-#    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.0.7
-#  - distro: centos6
-#    distribution: centos
-#    version: 6
-#    init: /sbin/init
-#    run_opts: "--privileged"
-#    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.0.7
-#  - distro: ubuntu1604
-#    distribution: ubuntu
-#    version: 16.04
-#    init: /lib/systemd/systemd
-#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-#    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.0.7  
-  - distro: ubuntu1404
-    distribution: ubuntu
-    version: 14.04
-    init: /sbin/init
-    run_opts: "--privileged"
-    playbook: test.yml
-    PRIVATE_BOWER_VERSION: 1.1.9
+  - PRIVATE_BOWER_VERSION: 1.0.7
+  - PRIVATE_BOWER_VERSION: 1.1.9
 #  - distro: ubuntu1604
 #    distribution: ubuntu
 #    version: 16.04
@@ -96,23 +70,47 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-  - env: distro=ubuntu1604
-  - env: distro=ubuntu1804
+  - env: PRIVATE_BOWER_VERSION=1.0.7
 
 before_install:
   - npm config set spin false
 #  - npm install -g private-bower
 
 install:
-  - container_id=$(mktemp)
-  # Run container in detached state.
-  - 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} ${distribution}-${version}:ansible "${init}" > "${container_id}"'
-  #- 'sudo docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
+  # Install Ansible.
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
-  # Ansible version.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version; git --version'
+  # Add ansible.cfg to pick up roles path.
+  #- "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
-  # Ansible galaxy.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy search nabla --version'
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-galaxy install -r /etc/ansible/roles/role_under_test/tests/requirements.yml'
-  
+  # Prepare tests
+  # Add user jenkins to the image (travis is 2000)
+  - id -a
+  - getent passwd 3000 || true # 3000 not found we can use it for jenkins user
+#  - groupadd -g ${DOCKER_GID} docker && \
+  - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
+  # Set password for the jenkins user (you may want to alter this).
+#  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
+
+  - pip install molecule
+
+  # Update Ansible submodule.
+  - git pull && git submodule init && git submodule update && git submodule status
+  - git submodule foreach git checkout master
+
+  - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+
+
+script:
+  # Check ansible version
+  - ansible --version
+
+  # Check syntax
+  - ansible-playbook -i ./hosts --syntax-check private-bower.yml -vvvv --connection=local -e "python_versions=[2.7, 3.5]"
+
+  # Molecule test
+  # - molecule test
+
+  # First run
+  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "python_versions=[2.7, 3.5]"
