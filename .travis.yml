@@ -129,7 +129,6 @@ script:
   # First run
   - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
-
   # Ansible syntax check.
-  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
+  - 'ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml --syntax-check'
 
