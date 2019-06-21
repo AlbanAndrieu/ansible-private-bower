@@ -25,9 +25,9 @@
     version={{ private_bower_bower_version }}
   with_items:
     - bower
-  become: true  
+  become: true
   tags: bower_setup
-  
+
 - name: private-bower | Copy the private-bower init script
   template:
     src: "private-bower.sh.j2"
@@ -39,16 +39,16 @@
   become: true
   tags: configure
 
-#- name: private-bower | Copy the private-bower init conf script
-#  template:
-#    src: "private-bower.conf.j2"
-#    dest: "/etc/init/private-bower.conf"
-#    owner: root
-#    group: root
-#    mode: 0644
-#  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-#  become: true
-#  tags: configure
+# - name: private-bower | Copy the private-bower init conf script
+#   template:
+#     src: "private-bower.conf.j2"
+#     dest: "/etc/init/private-bower.conf"
+#     owner: root
+#     group: root
+#     mode: 0644
+#   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#   become: true
+#   tags: configure
 
 - name: private-bower | Copy the private-bower init service script
   template:
@@ -81,9 +81,9 @@
   when: private_bower_backup_enabled
   tags: configure
 
-#TODO add to user
-#export GIT_SSL_NO_VERIFY=true
-#export GIT_CURL_VERBOSE=1
+# TODO add to user
+# export GIT_SSL_NO_VERIFY=true
+# export GIT_CURL_VERBOSE=1
 
 - name: private-bower | Update git configuration (http.sslVerify)
   action: command git config --global http.sslVerify {{ shell_git_ssl }}

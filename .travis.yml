@@ -7,28 +7,27 @@ sudo: required
 dist: travis_lts
 
 script:
-- sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
-- gcc --version
+  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
+  - gcc --version
 
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
-    - gcc-5
-    - g++-5
+      - gcc-5
+      - g++-5
 
-#language: node_js
 language: python
 node_js:
   - "8"
   - "11"
 
 python:
-#  - 2.7
-#  - 3.3
-#  - 3.4
-#  - 3.5
+  #  - 2.7
+  #  - 3.3
+  #  - 3.4
+  #  - 3.5
   - 3.6
 
 services:
@@ -36,13 +35,13 @@ services:
 
 branches:
   only:
-  - master
+    - master
 
 notifications:
   webhooks:
     urls:
-    - https://webhooks.gitter.im/e/47b10b81867bd0063cf5
-    - https://galaxy.ansible.com/api/v1/notifications/
+      - https://webhooks.gitter.im/e/47b10b81867bd0063cf5
+      - https://galaxy.ansible.com/api/v1/notifications/
     on_success: change
     on_failure: always
     on_start: false
@@ -97,16 +96,16 @@ install:
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
   # Add ansible.cfg to pick up roles path.
-  #- "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  # - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
   # Prepare tests
   # Add user jenkins to the image (travis is 2000)
   - id -a
   - getent passwd 3000 || true # 3000 not found we can use it for jenkins user
-#  - groupadd -g ${DOCKER_GID} docker && \
+  #  - groupadd -g ${DOCKER_GID} docker && \
   - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
   # Set password for the jenkins user (you may want to alter this).
-#  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
+  #  - sudo echo "jenkins:jenkins1234" | sudo chpasswd
 
   - pip install molecule
 
@@ -124,7 +123,7 @@ script:
   - ansible-playbook -i ./hosts --syntax-check private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
   # Molecule test
-  # - molecule test
+  - molecule test
 
   # First run
   - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
