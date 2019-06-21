@@ -139,4 +139,7 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Ensure private-bower is installed and at the right version.
-  - 'which /usr/local/bin/private-bower'
+  #- 'which /usr/local/bin/private-bower'
+  - 'which private-bower'
+  - 'ls -lrta /usr/local/bin/private-bower'
+  - 'private-bower --version'  
