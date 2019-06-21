@@ -129,6 +129,14 @@ script:
   # First run
   - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
-  # Ansible syntax check.
-  - 'ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml --syntax-check'
+  # Test role idempotence.
+  - idempotence=$(mktemp)
+  - ansible-playbook k -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
 
+  # Ensure private-bower is installed and at the right version.
+  - 'which /usr/local/bin/private-bower'
