@@ -28,10 +28,10 @@ ansigenome_info:
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'private-bower'
 
-  travis: True
+  travis: true
 
   authors:
-    - name:  'Alban Andrieu'
+    - name: 'Alban Andrieu'
       url: 'fr.linkedin.com/in/nabla/'
       email: 'alban.andrieu@free.fr'
       twitter: 'AlbanAndrieu'
@@ -52,5 +52,5 @@ ansigenome_info:
             - alban.andrieu.private-bower
         `
 
-  #custom: |
-  #  Any custom output you want after the usage section..
+  # custom: |
+  #   Any custom output you want after the usage section..

@@ -6,18 +6,6 @@
 sudo: required
 dist: travis_lts
 
-script:
-  - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
-  - gcc --version
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-5
-      - g++-5
-
 language: python
 node_js:
   - "8"
@@ -58,22 +46,8 @@ cache:
 
 env:
   matrix:
-  - PRIVATE_BOWER_VERSION=1.0.7
-  - PRIVATE_BOWER_VERSION=1.1.9
-#  - distro: ubuntu1604
-#    distribution: ubuntu
-#    version: 16.04
-#    init: /sbin/init
-#    run_opts: "--privileged"
-#    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.1.9
-#  - distro: debian8
-#    distribution: debian
-#    version: 8
-#    init: /lib/systemd/systemd
-#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-#    playbook: test.yml
-#    PRIVATE_BOWER_VERSION: 1.1.9
+    - PRIVATE_BOWER_VERSION=1.0.7
+    - PRIVATE_BOWER_VERSION=1.1.9
   global:
     - JENKINS_HOME: /home/jenkins
     - JENKINS_UID: 3000
@@ -84,11 +58,11 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-  - env: PRIVATE_BOWER_VERSION=1.0.7
+    - env: PRIVATE_BOWER_VERSION=1.0.7
 
 before_install:
   - npm config set spin false
-#  - npm install -g private-bower
+  - npm install -g private-bower
 
 install:
   # Install Ansible.
@@ -101,7 +75,7 @@ install:
   # Prepare tests
   # Add user jenkins to the image (travis is 2000)
   - id -a
-  - getent passwd 3000 || true # 3000 not found we can use it for jenkins user
+  - getent passwd 3000 || true   #     3000 not found we can use it for jenkins user
   #  - groupadd -g ${DOCKER_GID} docker && \
   - sudo adduser --quiet --disabled-password --shell /bin/bash --uid ${JENKINS_UID} --gid ${DOCKER_GID} --home ${JENKINS_HOME} --gecos "Jenkins" jenkins
   # Set password for the jenkins user (you may want to alter this).
@@ -138,7 +112,6 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Ensure private-bower is installed and at the right version.
-  #- 'which /usr/local/bin/private-bower'
   - 'which private-bower'
   - 'ls -lrta /usr/local/bin/private-bower'
-  - 'private-bower --version'  
+  - 'private-bower --version'

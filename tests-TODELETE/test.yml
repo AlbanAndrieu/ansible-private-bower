@@ -7,11 +7,11 @@
       when: ansible_os_family == 'RedHat'
 
   roles:
-#    - role: geerlingguy.nodejs
+    # - role: geerlingguy.nodejs
     - role: role_under_test
 
   vars:
-       private_bower_version: 1.1.9
+    private_bower_version: 1.1.9
 
 #  tasks:
 #    - name: Check private-bower
