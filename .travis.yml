@@ -131,7 +131,7 @@ script:
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - ansible-playbook k -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
+  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
