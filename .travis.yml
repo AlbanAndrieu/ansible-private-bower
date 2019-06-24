@@ -87,24 +87,24 @@ install:
   - git pull && git submodule init && git submodule update && git submodule status
   - git submodule foreach git checkout master
 
-  - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+  - ansible-galaxy install -r ./requirements.yml -p ./roles/ --ignore-errors
 
 script:
   # Check ansible version
   - ansible --version
 
   # Check syntax
-  - ansible-playbook -i ./hosts --syntax-check private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
+  - ansible-playbook -i ./hosts --syntax-check ./private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
   # Molecule test
   - molecule test
 
   # First run
-  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
+  - ansible-playbook -i ./hosts --connection=local -vvvv ./private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - ansible-playbook -i ./hosts --connection=local -vvvv private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
+  - ansible-playbook -i ./hosts --connection=local -vvvv ./private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
