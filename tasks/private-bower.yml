@@ -4,7 +4,6 @@
 - name: private-bower | Install screen
   action: "{{ ansible_pkg_mgr }} name=screen update_cache=yes state={{ private_bower_pkg_state|default('present') }}"
   tags: private_bower_setup
-#  become: true
 
 - name: private-bower | Private-bower packages
   npm: >
@@ -14,7 +13,6 @@
     version={{ private_bower_version }}
   with_items:
     - private-bower
-#  become: true
   tags: private_bower_setup
 
 - name: private-bower | Bower packages
@@ -25,7 +23,6 @@
     version={{ private_bower_bower_version }}
   with_items:
     - bower
-#  become: true
   tags: bower_setup
 
 - name: private-bower | Copy the private-bower init script
@@ -36,7 +33,6 @@
     group: root
     mode: 0755
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-#  become: true
   tags: configure
 
 # - name: private-bower | Copy the private-bower init conf script
@@ -47,7 +43,6 @@
 #     group: root
 #     mode: 0644
 #   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-##   become: true
 #   tags: configure
 
 - name: private-bower | Copy the private-bower init service script
@@ -58,7 +53,6 @@
     group: root
     mode: 0644
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-#  become: true
   tags: configure
 
 - name: private-bower | Copy the private-bower backup script
@@ -87,13 +81,11 @@
 
 - name: private-bower | Update git configuration (http.sslVerify)
   action: command git config --global http.sslVerify {{ shell_git_ssl }}
-#  become: true
   changed_when: false
 
 - name: private-bower | Start the private-bower service
   service: name=private-bower state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
-#  become: true
 
 - debug: msg=" private-bower | Avaialable at http://localhost:5678/"

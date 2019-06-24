@@ -1,15 +1,15 @@
 ---
 
-#- name: Converge
-#  hosts: all
+# - name: Converge
+#   hosts: all
 #
-#  roles:
-#    - role: geerlingguy.nodejs
+#   roles:
+#     - role: geerlingguy.nodejs
 
 - name: Converge
   hosts: all
 
   roles:
     - role: alban.andrieu.private-bower
-      verbose: yes
-  no_log: False
+      verbose: true
+  no_log: false
