@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: Install private-bower to all nodes
+  hosts: all
+  gather_facts: false
   #  become: true
 
   roles:
