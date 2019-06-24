@@ -94,7 +94,7 @@ script:
   - ansible --version
 
   # Check syntax
-  - sudo ansible-playbook -i ./hosts --syntax-check ./private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
+  - ansible-playbook -i ./hosts --syntax-check ./private-bower.yml -vvvv --connection=local -e "private_bower_version=$PRIVATE_BOWER_VERSION"
 
   # Molecule test
   - molecule test
@@ -104,7 +104,7 @@ script:
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - sudo ansible-playbook -i ./hosts --connection=local -vvvv ./private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
+  - ansible-playbook -i ./hosts --connection=local -vvvv ./private-bower.yml -e "private_bower_version=$PRIVATE_BOWER_VERSION" | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
