@@ -2,5 +2,5 @@
 # This playbook contains common plays that will be run on all nodes.
 
 - include: private-bower.yml
-  # when: private_bower_enabled
+  when: private_bower_enabled
   tags: [private_bower]

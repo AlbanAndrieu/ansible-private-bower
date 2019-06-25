@@ -28,25 +28,33 @@ platforms:
     image: solita/ubuntu-systemd:xenial
     groups:
       - group1
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
+    pre_build_image: true
   - name: private-bower-ubuntu-bionic
     image: solita/ubuntu-systemd:bionic
     groups:
       - group1
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
+    pre_build_image: true
 provisioner:
   name: ansible
   lint:
     name: ansible-lint
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-playbook.yml}
 scenario:
   name: default
   test_sequence:
     - lint
     - destroy
-    - dependency
+    # - dependency
     - syntax
     - create
-    - prepare
+    # - prepare
     - converge
     # 2 below will be hard to get 100% right
     # - idempotence
