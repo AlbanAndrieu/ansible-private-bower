@@ -6,8 +6,6 @@ dependency:
     ignore-errors: true
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
   - name: private-bower-centos
     image: milcom/centos7-systemd:latest
