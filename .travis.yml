@@ -26,15 +26,6 @@ branches:
   only:
     - master
 
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/47b10b81867bd0063cf5
-      - https://galaxy.ansible.com/api/v1/notifications/
-    on_success: change
-    on_failure: always
-    on_start: false
-
 cache:
   pip: true
   npm: true
@@ -109,10 +100,24 @@ script:
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+#    && (echo 'Idempotence test: pass' && exit 0)
+#    || (echo 'Idempotence test: fail' && exit 1)
 
   # Ensure private-bower is installed and at the right version.
   - 'which private-bower'
   - 'ls -lrta /usr/local/bin/private-bower || true'
   - 'private-bower --version'
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/47b10b81867bd0063cf5
+      - https://galaxy.ansible.com/api/v1/notifications/
+    on_success: change
+    on_failure: always
+    on_start: false
+  email:
+    recipients:
+      - alban.andrieu@nabla.mobi
+    on_success: [always|never|change]         # default: change
+    on_failure: [always|never|change]         # default: always
