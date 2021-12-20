@@ -2,13 +2,16 @@
 private_bower_enabled: true                       # Enable module
 
 private_bower_version: "1.1.9"
-private_bower_base_dir: "/usr/local/lib/node_modules/private-bower"
+private_bower_base_dir: "/usr/lib/node_modules/private-bower/"  # ubuntu 20 /usr/lib/node_modules/private-bower/bin/private-bower
+# On Red Hat 6 ln -s /usr/local/node/lib/node_modules/private-bower/bin/private-bower /usr/bin/private-bower
+private_bower_bin: "/usr/bin/private-bower"  # ubuntu 20 {{ private_bower_base_dir }}/bin/private-bower
 private_bower_conf: "bower.conf.json"
 private_bower_user: "www-data"
 private_bower_log: "/var/log/private-bower.log"
-private_bower_startup_opt: ""      # use "screen -dmL"
-private_bower_bower_version: "latest"
-# private_bower_bower_version: "1.8.8"
+# private_bower_output: " 2>&1 | tee {{ private_bower_log }} "
+private_bower_output: " >> {{ private_bower_log }} 2>&1 "
+private_bower_startup_opt: "node"      # use "screen -dmL" node /usr/local/node/lib/node_modules/private-bower/bin/private-bower
+private_bower_bower_version: "latest"   #  "1.8.12"
 
 private_bower_repository_cache_cache_private: "false"
 private_bower_repository_cache_git_enabled: "true"

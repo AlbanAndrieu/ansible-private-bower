@@ -6,8 +6,8 @@ dependencies: []
 galaxy_info:
   author: Alban Andrieu
   description: A role for installing private-bower
-  role_name: private-bower
-  namespace: AlbanAndrieu
+  role_name: private_bower
+  namespace: albanandrieu
   company: Nabla
   license: GPLv3
   min_ansible_version: 2.7.8

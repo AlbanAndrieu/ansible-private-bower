@@ -5,7 +5,7 @@ dependency:
   options:
     ignore-errors: true
 driver:
-  name: delegated
+  name: docker
 lint: |
   set -e
   yamllint .
@@ -26,14 +26,14 @@ platforms:
     command: /sbin/init
     groups:
       - group1
-  - name: private-bower-ubuntu-xenial
-    image: solita/ubuntu-systemd:xenial
-    groups:
-      - group1
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
+  # - name: private-bower-ubuntu-xenial
+  #   image: solita/ubuntu-systemd:xenial
+  #   groups:
+  #     - group1
+  #   volumes:
+  #     - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #   privileged: true
+  #   pre_build_image: true
   - name: private-bower-ubuntu-bionic
     image: solita/ubuntu-systemd:bionic
     groups:

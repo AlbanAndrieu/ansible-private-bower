@@ -2,7 +2,7 @@
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks.git
-    rev: v4.0.1 # ok python3.6 on Ubuntu 18.04 AND python3.7 on Ubuntu 19.04 AND python3.8 on Ubuntu 20.04
+    rev: v4.0.1  # ok python3.6 on Ubuntu 18.04 AND python3.7 on Ubuntu 19.04 AND python3.8 on Ubuntu 20.04
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -45,10 +45,8 @@ repos:
       - id: name-tests-test
         exclude: >
           (?x)^(
-              .*/molecule/default/tests/test_default.py|
+              molecule/default/tests/.*|
           )$
-#      - id: no-commit-to-branch
-#        args: [--branch, develop, --branch, master, --branch, release/*]
       - id: end-of-file-fixer
       - id: fix-encoding-pragma
       - id: requirements-txt-fixer
@@ -59,7 +57,7 @@ repos:
     hooks:
       - id: autopep8
   - repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2 # Use the sha / tag you want to point at
+    rev: 3.9.2  # Use the sha / tag you want to point at
     hooks:
       - id: flake8
         args: [--max-line-length=120]
@@ -96,7 +94,6 @@ repos:
     rev: 1.0.5
     hooks:
       - id: shell-lint
-        #entry: pre_commit_hooks/shell-lint.sh -x
         args: [-x]
         exclude: >
           (?x)^(
@@ -111,10 +108,6 @@ repos:
     rev: v1.5.7
     hooks:
       - id: autopep8
-  #-   repo: https://github.com/PyCQA/bandit
-  #    rev: master
-  #    hooks:
-  #    - id: bandit
   - repo: https://github.com/IamTheFij/ansible-pre-commit
     rev: v0.1.2
     hooks:
@@ -126,12 +119,6 @@ repos:
         args: [--config, .htmlhintrc]
       - id: markdown-toc
         args: [--maxdepth, "3", -i]
-#  - repo: https://github.com/gitguardian/ggshield
-#    rev: v1.10.7
-#    hooks:
-#      - id: ggshield
-#        language_version: python3
-#        stages: [commit]
   - repo: https://github.com/AlbanAndrieu/nabla-hooks.git
     rev: v1.0.3
     hooks:
