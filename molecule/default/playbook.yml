@@ -10,6 +10,6 @@
   hosts: all
 
   roles:
-    - role: alban.andrieu.private-bower
+    - role: ../  # role: albanandrieu.private_bower
       verbose: true
 #  no_log: false

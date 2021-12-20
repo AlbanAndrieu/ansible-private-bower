@@ -57,7 +57,7 @@
 
 - name: private-bower | Copy the private-bower backup script
   template:
-    src: "rivate-bower-backup.sh.j2"
+    src: "private-bower-backup.sh.j2"
     dest: "{{ private_bower_base_dir }}/bin/backup.sh"
     owner: root
     group: root
@@ -79,7 +79,7 @@
 # export GIT_SSL_NO_VERIFY=true
 # export GIT_CURL_VERBOSE=1
 
-- name: private-bower | Update git configuration (http.sslVerify)
+- name: private-bower | Update git configuration (http.sslVerify)  # noqa command-instead-of-module
   action: command git config --global http.sslVerify {{ shell_git_ssl }}
   changed_when: false
 
@@ -88,4 +88,5 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
 
-- debug: msg=" private-bower | Avaialable at http://localhost:5678/"
+- name: private-bower | Service url
+  debug: msg=" private-bower | Available at http://localhost:5678/"

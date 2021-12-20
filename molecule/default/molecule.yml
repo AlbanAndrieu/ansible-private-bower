@@ -5,7 +5,11 @@ dependency:
   options:
     ignore-errors: true
 driver:
-  name: docker
+  name: delegated
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 platforms:
   - name: private-bower-centos
     image: milcom/centos7-systemd:latest
