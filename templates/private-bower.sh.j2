@@ -1,8 +1,5 @@
 #!/bin/sh
 # {{ ansible_managed }}
-# chkconfig: 235 99 10
-# description: Start or stop the Private bower server
-#
 ### BEGIN INIT INFO
 # Provides: private-bower
 # Required-Start: $network $syslog
@@ -12,24 +9,36 @@
 # Description: Start or stop the Private bower server
 ### END INIT INFO
 
-if [ -z "$1" ]; then
-  echo "`basename $0` {start|stop}"
-  exit
-fi
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+. /lib/lsb/init-functions
+
+#if [ -z "$1" ]; then
+#  echo "`basename $0` {start|stop}"
+#  exit
+#fi
 
 cd {{ private_bower_base_dir }}
 
 case "$1" in
-start)
-  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
-;;
-restart)
-  pkill -f private-bower
-  lsof -i :5678
-  exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
-;;
-stop)
-  pkill -f private-bower
-  lsof -i :5678
-;;
+  start)
+    su - {{ private_bower_user }} -c "{{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }} "
+    #exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
+  ;;
+  restart)
+    pkill -f private-bower || true
+    lsof -i :5678
+    exec sudo -u {{ private_bower_user }} {{ private_bower_startup_opt }} private-bower --config {{ private_bower_conf }} 2>&1 | tee {{ private_bower_log }}
+  ;;
+  stop)
+    pkill -f private-bower || true
+    lsof -i :5678
+  ;;
+  *)
+    echo "Usage: $0 start|stop" >&2
+    # exit 3
+    ;;
 esac
+
+
+exit 0
